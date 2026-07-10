@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.website.board.mapper.BoardMapper">
+    <resultMap id="boardMap" type="BoardDTO">
+        <result column="b_num" property="boardNumber"></result>
+        <result column="b_name" property="boardName"></result>
+        <result column="b_title" property="boardTitle"></result>
+        <result column="b_content" property="boardContent"></result>
+        <result column="b_pwd" property="boardPasswd"></result>
+        <result column="b_readcnt" property="boardReadCnt"></result>
+        <result column="b_date" property="boardDate"></result>
+    </resultMap>
+
+    <select id="boardList" resultMap="boardMap">
+        SELECT b_num, b_name, b_title, b_content, b_pwd, b_readCnt, b_date
+        FROM spring_board
+        ORDER BY b_num DESC
+    </select>
+
+    <insert id="boardInsert" parameterType="BoardDTO" useGeneratedKeys="true" keyColumn="b_num" keyProperty="boardNumber">
+        INSERT INTO spring_board(b_name, b_title, b_content, b_pwd, b_readCnt, b_date)
+        VALUES (#{boardName}, #{boardTitle}, #{boardContent}, #{boardPasswd}, #{boardReadCnt}, #{boardDate})
+    </insert>
+
+    <update id="boardUpdate" parameterType="BoardDTO">
+        UPDATE spring_board SET
+            b_name = #{boardName}, b_title = #{boardTitle}, b_content = #{boardContent}, b_pwd = #{boardPasswd}, b_readCnt = #{boardReadCnt}, b_date = #{boardDate}
+        WHERE
+            b_num = #{boardNumber}
+    </update>
+
+    <delete id="boardDelete" parameterType="int">
+        DELETE
+        FROM
+            spring_board
+        WHERE
+            b_num = #{boardNumber}
+    </delete>
+
+</mapper>
