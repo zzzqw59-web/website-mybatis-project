@@ -2,11 +2,14 @@ package com.spring.website.mapper;
 
 import com.spring.website.board.dto.BoardDTO;
 import com.spring.website.board.mapper.BoardMapper;
+import com.spring.website.common.dto.PageRequestDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
+
+import java.util.Optional;
 
 @MybatisTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -37,21 +40,6 @@ public class BoardMapperTest {
         log.info("등록된 행의 수: {}", result);
     }
 
-    @Test
-    public void boardUpdateTest() {
-        BoardDTO board = new BoardDTO();
-        board.setBoardNumber(213);
-        board.setBoardName("지문인");
-        board.setBoardTitle("오타 개쩌네");
-        board.setBoardContent("오타 잘 보긴 해야할듯");
-        board.setBoardPasswd("456");
-        board.setBoardReadCnt(886);
-        board.setBoardDate("20/12/20");
-
-        int result = boardMapper.boardUpdate(board);
-
-        log.info("수정된 행의 수: {}", result);
-    }
 
     @Test
     public void boardDeleteTest() {
@@ -59,5 +47,44 @@ public class BoardMapperTest {
         int result = boardMapper.boardDelete(boardNumber);
 
         log.info("삭제된 행의 수: {}", result);
+    }
+
+    @Test
+    public void readCntUpdateTest() {
+        int boardNumber = 1;
+        int count = boardMapper.readCntUpdate(boardNumber);
+        log.info("수정된 행의 수: {}", count);
+    }
+
+    @Test
+    public void boardDetailTest() {
+        int boardNumber = 1;
+        boardMapper.readCntUpdate(boardNumber);
+        Optional<BoardDTO> optionalBoard = boardMapper.boardDetail(boardNumber);
+        log.info("데이터 존재 여부: {} ", optionalBoard.isPresent());
+        optionalBoard.ifPresent(boardDTO -> log.info("데이터 조회: {}", boardDTO));
+    }
+
+    @Test
+    public void boardUpdateTest() {
+        BoardDTO boardDTO = new BoardDTO();
+        boardDTO.setBoardTitle("미안하다 사랑한다");
+        boardDTO.setBoardContent("ㅋㅋㅋ");
+        boardDTO.setBoardPasswd("142");
+        boardDTO.setBoardNumber(1);
+
+        int result = boardMapper.boardUpdate(boardDTO);
+
+        log.info("변경된 행의 수: {}", result);
+    }
+
+    @Test
+    public void selectBoardListTest() {
+        PageRequestDTO pageRequestDTO = new PageRequestDTO();
+        pageRequestDTO.setSearchType("name");
+        pageRequestDTO.setKeyword("홍");
+        boardMapper.selectBoardList(pageRequestDTO).forEach(boardDTO -> {
+            log.info(boardDTO.toString());
+        });
     }
 }

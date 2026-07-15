@@ -9,7 +9,11 @@ public interface BoardService {
 
     int boardInsert(BoardDTO boardDTO);
 
-    int boardUpdate(BoardDTO boardDTO);
-
     int boardDelete(int boardNumber);
+
+    BoardDTO boardDetail(int boardNumber);
+
+    BoardDTO updateForm(int boardNumber);
+
+    int boardUpdate(BoardDTO boardDTO);
 }

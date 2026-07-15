@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--
+    본문 내용을 작성하는 페이지이다.
+    <html> 태그에 layout:decorate="~{공통 레이아웃 경로}"를 선언하면
+    지정한 레이아웃 파일을 기본 화면 구조로 사용한다.
+-->
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/client/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <section layout:fragment="content" class="py-5 mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3>자유게시판</h3>
+            <a th:href="@{/board/write}" class="btn btn-primary">글쓰기</a>
+        </div>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th>조회수</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${boardList == null or #lists.isEmpty(boardList)}">
+                    <td colspan="5" class="text-center">
+                        게시글이 존재하지 않습니다.
+                    </td>
+                </tr>
+
+                <tr th:each="board : ${boardList}">
+                    <td th:text="${board.boardNumber}"></td>
+                    <td>
+                        <a th:href="@{/board/{boardNumber}(boardNumber=${board.boardNumber})}" th:text="${board.boardTitle}"></a>
+                    </td>
+                    <td th:text="${board.boardNumber}"></td>
+                    <td th:text="${board.boardDate}"></td>
+                    <td th:text="${board.boardReadCnt}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <th:block layout:fragment="script">
+        <script>
+            console.log("게시글 목록 확인");
+        </script>
+    </th:block>
+</body>
+</html>
